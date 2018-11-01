@@ -3,6 +3,7 @@ import { WidgetModel } from './types';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { GetItemsPending } from './store/actions/items.action';
+import { IActivityType, IActivityTypesState } from './store/reducers/types.reducer';
 
 @Component({
   selector: 'app-root',
@@ -24,13 +25,13 @@ export class AppComponent implements OnInit, OnDestroy {
    * Gets first item of selected type to provide it to other modules
    * @param selectedType - selected type (hotels|fishing|tours)
    */
-  public getFirstOfSelectedType(selectedType: string): void {
+  public getFirstOfSelectedType(selectedType: IActivityType): void {
     if (!selectedType) {
       this.selectedDataItem = this.widgetDataHandled[0];
     }
 
     const filteredByTypeData: WidgetModel[] = this.widgetDataHandled.filter((item: WidgetModel) => {
-      return item.type === selectedType;
+      return item.type === selectedType.type;
     });
 
     this.selectedDataItem = filteredByTypeData[0];
@@ -63,6 +64,18 @@ export class AppComponent implements OnInit, OnDestroy {
         if (data.length > 0) {
           this.widgetDataHandled = data;
           this.selectedDataItem = this.widgetDataHandled[0];
+
+          // this.getFirstOfSelectedType()
+
+          this._store.select('menu')
+            .subscribe((menu: IActivityTypesState) => {
+              this.getFirstOfSelectedType( menu.currentType);
+            });
+
+          this._store.select('currentActivityId')
+            .subscribe((id: string) => {
+              this.getItemById(id);
+            });
         }
       });
   }

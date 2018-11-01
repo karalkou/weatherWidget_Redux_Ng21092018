@@ -14,6 +14,8 @@ import { environment } from '../environments/environment';
 import { BASE_URL, BASE_URL_TOKEN } from './config';
 import { ItemsEffects } from './store/effects/items.effect';
 import { HttpClientModule } from '@angular/common/http';
+import { MenuComponent } from './menu/menu.component';
+import { ContentComponent } from './content/content.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
     WeatherCardComponent,
     SocialCardComponent,
     MainComponent,
-    ActivityFilterPipe
+    ActivityFilterPipe,
+    MenuComponent,
+    ContentComponent
   ],
   imports: [
     BrowserModule,
