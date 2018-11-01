@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { WidgetModel } from '../../types';
+import { WidgetModel } from '../types';
 
 @Pipe({
   name: 'activityFilter'

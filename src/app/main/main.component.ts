@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { WidgetModel } from '../../types';
+import { WidgetModel } from '../types';
 
 @Component({
   selector: 'app-main',
@@ -44,6 +44,8 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     const typeListArr: string[] = [];
+
+    console.log('this.widgetData: ', this.widgetData);
 
     this.widgetData.forEach((item) => {
       typeListArr.push(item.type);

@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { WidgetModel } from './types';
-import { widgetData$ } from '../assets/fixtures/data';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { GetItemsPending } from './store/actions/items.action';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  constructor(private _store: Store<any>) {
+  }
+
+  public widgetData$: Observable<WidgetModel[]>;
   public widgetDataHandled: WidgetModel[];
   public selectedDataItem: WidgetModel;
   public subscription: Subscription;
@@ -41,10 +47,23 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = widgetData$
+    this._store.dispatch(new GetItemsPending());
+    this.widgetData$ = this._store.select('items');
+
+    console.log('this._store: ', this._store);
+    console.log('widgetData$: ', this.widgetData$); // в этой строке выводит Store {}. Почему?
+
+    this.subscription = this.widgetData$
       .subscribe((data: WidgetModel[]) => {
-        this.widgetDataHandled = data;
-        this.selectedDataItem = this.widgetDataHandled[0];
+        /**
+         * это нормальная практика вот так чекать наличие данных или лучше в компоненты
+         * или прокидывать поток <app-main [widgetData]="widgetDataHandled"></app-main> ?
+         * или подключаться к стору внутри app-main ?
+         */
+        if (data.length > 0) {
+          this.widgetDataHandled = data;
+          this.selectedDataItem = this.widgetDataHandled[0];
+        }
       });
   }
 
