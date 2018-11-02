@@ -1,7 +1,9 @@
-import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WidgetModel } from './types';
-import { widgetData$ } from '../assets/fixtures/data';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { GetItemsPending } from './store/actions/items.action';
+import { IActivityType, IActivityTypesState } from './store/reducers/types.reducer';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +11,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  constructor(private _store: Store<any>) {
+  }
+
+  public widgetData$: Observable<WidgetModel[]>;
   public widgetDataHandled: WidgetModel[];
   public selectedDataItem: WidgetModel;
   public subscription: Subscription;
@@ -18,13 +25,13 @@ export class AppComponent implements OnInit, OnDestroy {
    * Gets first item of selected type to provide it to other modules
    * @param selectedType - selected type (hotels|fishing|tours)
    */
-  public getFirstOfSelectedType(selectedType: string): void {
+  public getFirstOfSelectedType(selectedType: IActivityType): void {
     if (!selectedType) {
       this.selectedDataItem = this.widgetDataHandled[0];
     }
 
     const filteredByTypeData: WidgetModel[] = this.widgetDataHandled.filter((item: WidgetModel) => {
-      return item.type === selectedType;
+      return item.type === selectedType.type;
     });
 
     this.selectedDataItem = filteredByTypeData[0];
@@ -41,10 +48,35 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = widgetData$
+    this._store.dispatch(new GetItemsPending());
+    this.widgetData$ = this._store.select('items');
+
+    console.log('this._store: ', this._store);
+    console.log('widgetData$: ', this.widgetData$); // в этой строке выводит Store {}. Почему?
+
+    this.subscription = this.widgetData$
       .subscribe((data: WidgetModel[]) => {
-        this.widgetDataHandled = data;
-        this.selectedDataItem = this.widgetDataHandled[0];
+        /**
+         * это нормальная практика вот так чекать наличие данных или лучше в компоненты
+         * или прокидывать поток <app-main [widgetData]="widgetDataHandled"></app-main> ?
+         * или подключаться к стору внутри других компонентов ?
+         */
+        if (data.length > 0) {
+          this.widgetDataHandled = data;
+          this.selectedDataItem = this.widgetDataHandled[0];
+
+          // this.getFirstOfSelectedType()
+
+          this._store.select('menu')
+            .subscribe((menu: IActivityTypesState) => {
+              this.getFirstOfSelectedType( menu.currentType);
+            });
+
+          this._store.select('currentActivityId')
+            .subscribe((id: string) => {
+              this.getItemById(id);
+            });
+        }
       });
   }
 

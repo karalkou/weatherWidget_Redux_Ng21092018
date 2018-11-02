@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="let item of typeList">
+    <a
+      href="#"
+      [attr.data-type]="item.type"
+      (click)="getType($event)"
+    >
+      {{item.name}}
+    </a>
+  </li>
+</ul>

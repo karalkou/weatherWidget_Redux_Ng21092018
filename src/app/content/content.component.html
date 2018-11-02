@@ -1,0 +1,25 @@
+<style>
+  .activity-desc{ cursor: pointer; }
+  .activity-desc:hover { background-color: lightgrey; }
+</style>
+<div class="scrollbar" id="style-2">
+  <div
+    class="activity-row"
+    style="cursor: pointer"
+    *ngFor="let item of widgetData | activityFilter:selectedType;"
+  >
+    <div class="activity-desc" (click)="getId(item._id)">
+      <h5><i>{{item.name}}</i></h5>
+      <h5>{{item.address}}</h5>
+      <h6>{{item.phone}}</h6>
+    </div>
+    <div class="activity-img">
+      <ul>
+        <li>
+          <img src="{{item.img}}" alt="" />
+        </li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
