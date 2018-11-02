@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IActivityTypesState } from '../store/reducers/types.reducer';
+import { IActivityType, IActivityTypesState } from '../store/reducers/types.reducer';
 import { WidgetModel } from '../types';
 import { SelectCurrentActivity } from '../store/actions/activities.action';
 
@@ -15,7 +15,7 @@ export class ContentComponent implements OnInit {
   }
 
   public widgetData: WidgetModel[];
-  public selectedType: string;
+  public selectedType: IActivityType;
 
   @Output()
   public selectId: EventEmitter<string> = new EventEmitter();

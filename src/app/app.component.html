@@ -1,4 +1,4 @@
-<div class="app-content" *ngIf="widgetDataHandled; else loadingTemplate">
+<ng-container *ngIf="widgetDataHandled; else loadingTemplate">
   <h1>Hot Weather Widget</h1>
   <div class="element">
 
@@ -24,7 +24,7 @@
       <a href="http://w3layouts.com/" target="_blank">W3layouts </a>
     </p>
   </div>
-</div>
+</ng-container>
 
 <ng-template #loadingTemplate>
   .....loading

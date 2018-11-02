@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WidgetModel } from './types';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
         /**
          * это нормальная практика вот так чекать наличие данных или лучше в компоненты
          * или прокидывать поток <app-main [widgetData]="widgetDataHandled"></app-main> ?
-         * или подключаться к стору внутри app-main ?
+         * или подключаться к стору внутри других компонентов ?
          */
         if (data.length > 0) {
           this.widgetDataHandled = data;

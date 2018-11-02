@@ -1,5 +1,3 @@
-import { IActivityType } from '../reducers/types.reducer';
-
 export const SELECT_CURRENT_ACTIVITY = 'SELECT_CURRENT_ACTIVITY';
 
 export class SelectCurrentActivity {
