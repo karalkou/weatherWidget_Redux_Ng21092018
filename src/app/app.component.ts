@@ -11,7 +11,7 @@ import { IActivityType, IActivityTypesState } from './store/reducers/types.reduc
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
+  // TODO: Change logic of selecting current activity! Auto select (type and appropriate activities) during initial render
   constructor(private _store: Store<any>) {
   }
 
@@ -56,16 +56,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscription = this.widgetData$
       .subscribe((data: WidgetModel[]) => {
-        /**
-         * это нормальная практика вот так чекать наличие данных или лучше в компоненты
-         * или прокидывать поток <app-main [widgetData]="widgetDataHandled"></app-main> ?
-         * или подключаться к стору внутри других компонентов ?
-         */
         if (data.length > 0) {
           this.widgetDataHandled = data;
           this.selectedDataItem = this.widgetDataHandled[0];
-
-          // this.getFirstOfSelectedType()
 
           this._store.select('menu')
             .subscribe((menu: IActivityTypesState) => {

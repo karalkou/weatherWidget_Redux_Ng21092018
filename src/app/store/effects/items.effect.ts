@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { GET_ITEMS_PENDING, GetItemsError, GetItemsSuccess } from '../actions/items.action';
 import { BASE_URL_TOKEN } from '../../config';
 
@@ -26,9 +26,6 @@ export class ItemsEffects {
         .pipe(
           map((res: any) => {
             return new GetItemsSuccess(res);
-            // below lines are from classwork, but they don't work
-            // console.log('res.data: ', res.data);
-            // return new GetItemsSuccess(res.data);
           }),
           catchError((err) => of(new GetItemsError(err)))
         )

@@ -6,7 +6,7 @@ const initialState: WidgetModel[] = [];
 export function itemsReducer(state = initialState, action: any) {
   switch (action.type) {
     case GET_ITEMS_SUCCESS:
-      console.log('reducer');
+      console.log('itemsReducer');
       return action.payload;
     default:
       return state;
